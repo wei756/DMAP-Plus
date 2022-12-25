@@ -1,0 +1,322 @@
+@charset "UTF-8";
+
+.musicController {
+	background: #222;
+	display: flex;
+	flex-direction: column;
+	height: 230px;
+	z-index: 100;
+}
+.musicController .ctrHeader {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  width: 100%;
+  user-select: none;
+}
+.musicController .ctrHeader .headerLeft {
+	color: var(--secondary-text-color);
+	font-size: 12px;
+}
+.musicController .ctrHeader .headerRight {
+	display: flex;
+	font-size: 14px;
+}
+.musicController .ctrHeader .headerRight .headerButton {
+	color: var(--secondary-text-color);
+	padding: 4px 8px;
+	font-size: 14px;
+	border-radius: 4px;
+	display: flex;
+	align-items: center;
+	gap: 4px;
+}
+.musicController .ctrHeader .headerRight .headerButton.btnPlaylist {
+  cursor: pointer;
+}
+.musicController .ctrHeader .headerRight .headerButton .iconBtn {
+	width: 14px;
+}
+.musicController .ctrHeader .headerRight .headerButton.lyric {
+  cursor: pointer;
+}
+.musicController .ctrHeader .headerRight .headerButton:hover {
+	background: #fff1;
+}
+.musicController .expandable {
+	position: relative;
+}
+
+.musicController .expandable .expandedMenu {
+  background: #000a;
+	border-radius: 4px;
+	display: flex;
+	flex-direction: column;
+	opacity: 0;
+	padding: 4px 0;
+	position: absolute;
+	right: 0;
+	bottom: 50%;
+	width: 96px;
+  box-shadow: 0 0 8px 0 #000a;
+	pointer-events: none;
+	transition: bottom ease .2s, LEFT ease .2s, right ease .2s, opacity ease .2s;
+}
+.musicController .expandable:hover .expandedMenu,
+.musicController .expandable.clicked .expandedMenu {
+	bottom: 100%;
+	opacity: 1;
+	pointer-events: initial;
+}
+.musicController .ctrHeader .headerRight .expandable .lyricMenu.expandedMenu {
+	width: 102px;
+}
+.musicController .ctrHeader .headerRight .expandable .playlistMenu.expandedMenu {
+	width: 170px;
+}
+.musicController .ctrHeader .headerRight .expandable .playlistMenu .btnToggleUsePlaylist {
+	display: flex;
+	justify-content: space-between;
+}
+.musicController .ctrHeader .headerRight .expandable .playlistMenu .btnToggleUsePlaylist .checkIcon {
+  opacity: 0;
+}
+.musicController .ctrHeader .headerRight .expandable .playlistMenu .btnToggleUsePlaylist.on .checkIcon {
+  opacity: 1;
+}
+.musicController .ctrHeader .headerRight .expandable .expandedMenu li {
+  border-radius: 4px;
+	cursor: pointer;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  position: relative;
+  font-size: 13px;
+  padding: 8px 12px;
+  gap: 8px;
+	user-select: none;
+	transition: background ease .15s;
+}
+.musicController .ctrHeader .headerRight .expandable .expandedMenu li:hover {
+	background: #fff1;
+}
+.musicController .ctrHeader .headerRight .expandable .expandedMenu li:active {
+	background: #fff3;
+}
+.musicController .ctrHeader .headerRight .musicOrder .orderList li::after {
+	margin-left: 6px;
+}
+.musicController .ctrHeader .headerRight .musicOrder .orderList.date.asc li.date::after,
+.musicController .ctrHeader .headerRight .musicOrder .orderList.title.asc li.title::after,
+.musicController .ctrHeader .headerRight .musicOrder .orderList.singer.asc li.singer::after {
+  content: '▲';
+}
+.musicController .ctrHeader .headerRight .musicOrder .orderList.date.desc li.date::after,
+.musicController .ctrHeader .headerRight .musicOrder .orderList.title.desc li.title::after,
+.musicController .ctrHeader .headerRight .musicOrder .orderList.singer.desc li.singer::after {
+  content: '▼';
+}
+
+.musicController .ctrWrapper {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	width: 100%;
+	flex-grow: 1;
+	padding-bottom: 24px;
+}
+.musicController .ctrWrapper span {
+	display: inline-block;
+	line-height: 1em;
+}
+.musicController .ctrWrapper #musicTitle {
+  color: var(--primary-text-color);
+  font-size: 18px;
+  margin-bottom: 8px;
+}
+.musicController .ctrWrapper #musicSinger {
+	color: var(--secondary-text-color);
+	font-size: 12px;
+	margin-bottom: 24px;
+}
+.musicController .ctrWrapper #musicProgress {
+	box-sizing: border-box;
+	padding: 0 16px;
+	width: 100%;
+	position: relative;
+}
+.musicController .ctrWrapper .musicControl {
+	color: #fff3;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	gap: 0 4px;
+}
+.musicController .ctrWrapper .musicControl button {
+	border-radius: 50%;
+	box-sizing: border-box;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	position: relative;
+}
+.musicController .ctrWrapper .musicControl button::after {
+	background: #fff0;
+	border-radius: 50%;
+	box-sizing: border-box;
+	content: "";
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	top: 0;
+	left: 0;
+	transition: background ease .15s;
+}
+.musicController .ctrWrapper .musicControl button:hover::after {
+	background: #fff1;
+}
+.musicController .ctrWrapper .musicControl button:active::after {
+	background: #fff3;
+}
+.musicController .ctrWrapper .musicControl button.btnPlaypause {
+	background: var(--accent-color);
+	color: #fff;
+	font-size: 24px;
+	width: 52px;
+	height: 52px;
+	margin: 0 8px;
+}
+.musicController .ctrWrapper .musicControl button.btnPlaypause .playing,
+.musicController .ctrWrapper .musicControl button.btnPlaypause .paused {
+	display: none;
+	line-height: 1em;
+	width: 22px;
+	/* height: 24px; */
+}
+.musicController .ctrWrapper .musicControl button.btnPlaypause .playing.ribbon,
+.musicController .ctrWrapper .musicControl button.btnPlaypause .paused.ribbon {
+	border: none;
+	width: max-content;
+	height: auto;
+	padding-bottom: 6px;
+}
+.musicController .ctrWrapper .musicControl button.btnPlaypause.playing .playing,
+.musicController .ctrWrapper .musicControl button.btnPlaypause.paused .paused {
+	display: block;
+}
+.musicController .ctrWrapper .musicControl button.btnSide {
+	color: #fff3;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	font-size: 20px;
+	width: 36px;
+	height: 36px;
+}
+.musicController .ctrWrapper .musicControl button.btnSide > .iconArea {
+	color: #fff3;
+	display: flex;
+	font-size: 18px;
+	line-height: 1em;
+	height: 18px;
+}
+.musicController .ctrWrapper .musicControl button.btnSide > img {
+	opacity: .3;
+	width: 18px;
+	height: 18px;
+	transition: opacity ease .15s;
+}
+.musicController .ctrWrapper .musicControl button.btnSide.on > img {
+  opacity: 1;
+}
+.musicController .ctrWrapper .musicControl button.btnPrev > img,
+.musicController .ctrWrapper .musicControl button.btnNext > img {
+  opacity: .8;
+  width: 20px;
+  height: 20px;
+}
+.musicController .ctrWrapper .musicControl button.btnPrev div.ribbon,
+.musicController .ctrWrapper .musicControl button.btnNext div.ribbon {
+	border: none;
+}
+.musicController .ctrWrapper .musicControl button.btnVolume {
+	transform: rotate(-90deg);
+	--value: 0;
+}
+.musicController .ctrWrapper .musicControl button.btnVolume .iconArea > img {
+	transform: rotate(90deg);
+	display: none;
+}
+.musicController .ctrWrapper .musicControl button.btnVolume.full .iconArea > img.iconFull,
+.musicController .ctrWrapper .musicControl button.btnVolume.half .iconArea > img.iconHalf,
+.musicController .ctrWrapper .musicControl button.btnVolume.small .iconArea > img.iconSmall,
+.musicController .ctrWrapper .musicControl button.btnVolume.mute .iconArea > img.iconMute {
+	display: inline;
+}
+.musicController .ctrWrapper .musicControl button.btnVolume:hover .expandedMenu,
+.musicController .ctrWrapper .musicControl button.btnVolume.clicked .expandedMenu {
+	left: 90%;
+}
+.musicController .ctrWrapper .musicControl button.btnVolume .expandedMenu {
+	background: transparent;
+	box-shadow: none;
+	border-radius: 16px;
+	padding: 8px;
+	width: fit-content;
+	left: 70%;
+	right: auto;
+	bottom: -8%;
+}
+.musicController .ctrWrapper .musicControl button.btnVolume .expandedMenu .menuWrapper {
+	background: #222;
+	box-shadow: 0px 0px 8px 1px #0003;
+	border-radius: 16px;
+	display: flex;
+	flex-direction: column;
+	padding: 8px 8px;
+	width: fit-content;
+	left: 110%;
+	right: auto;
+	bottom: 18%;
+}
+.musicController .ctrWrapper .musicControl button.btnVolume progress {
+	width: 100px;
+	height: 12px;
+}
+.musicController .ctrWrapper .musicControl button.btnVolume progress::-webkit-progress-bar {
+	background: #fff3;
+	border-radius: 6px;
+	height: 100%;
+	transition: height ease .15s, border-radius ease .15s;
+}
+.musicController .ctrWrapper .musicControl button.btnVolume progress::-webkit-progress-value {
+	background: white;
+	border-radius: 6px;
+	height: 100%;
+	transition: height ease .15s, border-radius ease .15s;
+}
+.musicController .ctrWrapper .musicControl button.btnVolume .volumeBarButton {
+	background: white;
+	border-radius: 50%;
+	width: 16px;
+	height: 16px;
+	position: absolute;
+	top: 14px;
+	left: calc(10px + .95px * var(--value));
+	pointer-events: none;
+}
+
+.musicController .ctrWrapper .musicControl button.btnSide.btnMode {
+	color: #fff3;
+	display: flex;
+	font-size: 14px;
+	line-height: 1em;
+	margin: 0;
+}
+.musicController .ctrWrapper .musicControl button.btnSide.btnMode.on {
+	color: #fff;
+}

@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>DMAP Plus</title>
+    <script type="text/javascript" src="./js/jwplayer/translations/ko.js"></script>
+    <script type="text/javascript" src="./js/jwplayer/jwplayer.js"></script>
+    <script>jwplayer.key="Bch7bd0cZt0adCRYHGveauTP1LaJlq1EMyrU/IxgfrGDc3gTqZxyPFEKKMI";</script>
+    <script type="text/javascript" src="./js/jwplayer/provider.hlsjs.js"></script>
+    <script type="text/javascript" src="./js/jwplayer/jwplayer.core.controls.js"></script>
+    <script type="text/javascript" src="./js/jwplayer/jwpsrv.js"></script>
+    <link rel="stylesheet" href="./css/style.css" type="text/css">
+    <link rel="stylesheet" href="./css/ToastArea.css" type="text/css">
+    <link rel="stylesheet" href="./css/MusicControl.css" type="text/css">
+    <link rel="stylesheet" href="./css/MusicListView.css" type="text/css">
+    <link rel="stylesheet" href="./css/VideoPlayer.css" type="text/css">
+    <link rel="stylesheet" href="./css/PlaylistPanel.css" type="text/css">
+    <script type="text/javascript" src="./DB/db.js"></script>
+  </head>
+  <body>
+    <div class="app">
+      <div class="left" focusable="true">
+        <div class="VideoPlayer" id="video"></div>
+      </div>
+      <div class="right">
+        <div class="header">
+          <button class="btnToggleVideo" onclick="toggleModeMusicOnly()" title="뮤비 숨기기">
+            <img src="./img/hideControl.png" />
+          </button>
+          <b style="padding-left: 10px;">DMAP</b>
+        </div>
+        <div class="listArea">
+          <div class="musicSelectHeader hide">
+            <button class="button btnSelectAll" onclick="addAllMusicToPlaylist()">전체 선택</button>
+            <button class="button btnDeselectAll" onclick="removeAllMusicToPlaylist()">전체 선택 해제</button>
+          </div>
+          <div class="MusicListView">
+          </div>
+          <div class="PlaylistPanel hide">
+          </div>
+          <div class="ribbonArea hide">
+            <div class="ribbon musicSelecting hide">
+              <div class="label"><span class="selectedCount">0</span>개 선택됨</div>
+              <div class="right">
+                <button class="button btnResetPlaylist" onclick="if (confirm('참말로 플레이리스트를 초기화하시겠습니까?')) { resetPlaylist();toggleEditPlaylistMode(); }">초기화</button>
+                <button class="button btnCloseSelectMode" onclick="toggleEditPlaylistMode()"><div class="checkIcon"></div>선택 마침</button>
+              </div>
+            </div>
+          </div>
+            <div class="captionOnList hide">
+              <header>
+                <div class="left">
+                  <button class="button btnClosePanel" onclick="toggleModeLyricView()">
+                    <img src="./img/arrow_down.png">
+                  </button>
+                  <span class="caption">가사</span>
+                </div>
+                <div class="right">
+                  <button class="button ribbonButton ribbonBottomSide btnEdit" onclick="toggleModeLyricEdit()">
+                    <img src="./img/edit.png">
+                    <div class="ribbon">편집</div>
+                  </button>
+                </div>
+              </header>
+              <ul class="captionText"></ul>
+            </div>
+            <section class="lyricEditor hide">
+              <header>
+                <span>가사 편집</span>
+                <div class="right">
+                  <button class="button btnExportScore" onclick="exportScore()">파일로 저장</button>
+                  <button class="button btnCloseLyricEditMode" onclick="toggleModeLyricEdit()">×</button>
+                </div>
+              </header>
+              <div class="lyricInfo">
+                <div class="infoItem title">
+                  <span class="label">제목</span>
+                  <input type="text" name="lyricTitle"></input>
+                </div>
+                <div class="infoItem offset">
+                  <span class="label">오프셋</span>
+                  <input type="number" name="lyricOffset"></input>ms
+                </div>
+              </div>
+              <div class="lyricListArea">
+                <div class="listHeader">
+                  <div class="right">
+                    <textarea name="lyricTextInput" placeholder="가사 입력"></textarea>
+                    <button class="lyricListButton btnInputLyricText" onclick="addLyricItemFromInput()">추가</button>
+                  </div>
+                </div>
+                <ul class="lyricList">
+                  <li class="lyricItem">
+                    <div class="time">
+                      <input type="time" class="timeInput" step="0.001" max="1:00:00"></input>
+                    </div>
+                    <div class="str">
+                      <input type="text" class="strInput"></input>
+                    </div>
+                  </li>
+                </ul>
+                <div class="listHeader">
+                  <div class="left">
+                    <button class="lyricListButton btnSyncLyric" onclick="syncTime(0)">현재 시간으로(Ctrl키)</button>
+                    <button class="lyricListButton btnSyncLyric" onclick="syncTime(-500, false)">-500ms</button>
+                    <button class="lyricListButton btnSyncLyric" onclick="syncTime(-50, false)">-50ms</button>
+                    <button class="lyricListButton btnSyncLyric" onclick="syncTime(50, false)">+50ms</button>
+                    <button class="lyricListButton btnSyncLyric" onclick="syncTime(500, false)">+500ms</button>
+                  </div>
+                  <div class="right">
+                  </div>
+                </div>
+              </div>
+            </section>
+            
+            <div class="ToastArea">
+            </div>
+          </div>
+          <div class="musicController">
+            <div class="ctrHeader">
+              <div class="headerLeft" id="totalplaylist"></div>
+              <div class="headerRight">
+                <div class="headerButton btnPlaylist">
+                  <img src="./img/playlist.png" class="iconBtn" />플레이리스트
+				        </div>
+                <div class="headerButton expandable musicOrder">
+                  <img src="./img/sort.png" class="iconBtn" />정렬
+                  <ul class="expandedMenu orderList date desc">
+                    <li class="date" onclick="changeOrder('date')">최신 순</li>
+                    <li class="title" onclick="changeOrder('title')">제목 순</li>
+                    <li class="singer" onclick="changeOrder('singer')">가수 순</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <div class="ctrWrapper">
+              <span id="musicTitle">제목</span>
+              <span id="musicSinger">가수</span>
+              <div id="musicProgress">
+                <progress id="progressBarPreview" max="100" value="0"></progress>
+                <progress 
+                  class="progressBar" 
+                  max="100" value="0" 
+                  onmouseenter="onMouseEnterProgressHandler(event)"
+                  onmousemove="onMouseMoveProgressHandler(event)"
+                  onmouseout="onMouseOutProgressHandler(event)"
+                  onclick="onClickProgressHandler(event)"></progress>
+                <div class="musicTime">
+                  <span class="currTime">0:00</span>
+                  <span class="wholeTime">0:00</span>
+                </div>
+              </div>
+              <div class="musicControl">
+                <button class="ribbonButton btnSide btnLyric btnMode" onclick="toggleModeLyricView()">
+                  <img src="./img/lyric.png" class="iconBtn" />
+                  <div class="ribbon">가사</div>
+                </button>
+                <button class="btnSide btnVolume expandable half" style="--value: 50" onclick="toggleMute(event)" onmousewheel="setAddVolume(-event.deltaY / 20)" accesskey="m">
+                  <div class="iconArea">
+                    <img src="./img/volume_full.png" class="iconFull" />
+                    <img src="./img/volume_half.png" class="iconHalf" />
+                    <img src="./img/volume_small.png" class="iconSmall" />
+                    <img src="./img/volume_mute.png" class="iconMute" />
+                  </div>
+                  <div class="expandedMenu volumeBar">
+                    <div class="menuWrapper" onmousedown="onMouseDownVolumeHandler(event)">
+                      <progress 
+                        id="volumeBarLine" 
+                        max="100" value="50" ></progress>
+                      <div class="volumeBarButton"></div>
+                  </div>
+                </div>
+                </button>
+                <button class="ribbonButton btnSide btnPrev" onclick="playPrev()">
+                  <img src="./img/prev.png" class="iconBtn" />
+                  <div class="ribbon">이전 곡</div>
+                </button>
+                <button class="ribbonButton btnPlaypause paused" onclick="playpause()" accesskey="space">
+                  <img src="./img/play.png" class="iconBtn paused" />
+                  <img src="./img/pause.png" class="iconBtn playing" />
+                  <div class="ribbon paused">재생</div>
+                  <div class="ribbon playing">일시정지</div>
+                </button>
+                <button class="ribbonButton btnSide btnNext" onclick="playNext()">
+                  <img src="./img/next.png" class="iconBtn" />
+                  <div class="ribbon">다음 곡</div>
+                </button>
+                <button class="ribbonButton btnSide btnMode btnShuffle" onclick="modeChange('shuffle')">
+                  <img src="./img/shuffle.png" class="iconBtn" />
+                  <div class="ribbon">셔플 재생</div>
+                </button>
+                <button class="ribbonButton btnSide btnMode btnRepeat" onclick="modeChange('repeat')">
+                  <img src="./img/repeat.png" class="iconBtn" />
+                  <div class="ribbon">한 곡 반복</div>
+                </button>
+              </div>
+            </div>
+          </div>
+      </div>
+    </div>
+    <script type="text/javascript" src="./js/functions.js"></script>
+    <script type="text/javascript" src="./js/tinyquery.js"></script>
+    <script type="text/javascript" src="./lyrics/lyrics.js"></script>
+    <script type="text/javascript" src="./js/lyrics/lyricLoader.js"></script>
+    <script type="text/javascript" src="./js/ToastManager.js"></script>
+    <script type="text/javascript" src="./js/DatabaseManager.js"></script>
+    <script type="text/javascript" src="./js/PlaylistManager.js"></script>
+    <script type="text/javascript" src="./js/PlaylistPanel.js"></script>
+    <script type="text/javascript" src="./js/QueueManager.js"></script>
+    <script type="text/javascript" src="./js/MusicListView.js"></script>
+    <script type="text/javascript" src="./js/VideoPlayer.js"></script>
+    <script type="text/javascript" src="./js/main.js"></script>
+    <script type="text/javascript" src="./js/lyrics/lyricView.js"></script>
+    <script type="text/javascript" src="./js/lyrics/lyricEditor.js"></script>
+    <script type="text/javascript" src="./js/lyrics/lyricLargeView.js"></script>
+  </body>
+</html>

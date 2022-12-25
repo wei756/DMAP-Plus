@@ -1,0 +1,720 @@
+@charset "UTF-8";
+@import url(http://fonts.googleapis.com/earlyaccess/notosanskr.css);
+
+:root {
+  --accent-color: #406189;
+
+  --primary-text-color: #fafafa;
+  --secondary-text-color: #aaa;
+}
+
+html,body,div,span,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,address,big,cite,code,del,dfn,em,font,img,ins,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td,button{
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-family: 'Noto Sans KR';
+}
+ol,ul,li,dl,dt,dd {list-style:none; margin:0; padding:0;font-family: 'Noto Sans KR';}
+a, a:link, a:visited, a:active {text-decoration:none;}
+table {border-spacing:0; border-collapse:collapse;}
+img{-ms-interpolation-mode: bicubic; vertical-align: top; max-width: 100%;}
+select{color:#555; vertical-align:middle; padding:5px;}
+input{color:#555; font-size:13px; font-family: 'Noto Sans KR', Arial; vertical-align:middle;}
+input[type='text'],input[type='password'],input[type='submit'],input[type='search'] {-webkit-appearance:none; border-radius:0;}
+input:checked[type='checkbox'] {background-color:#666; -webkit-appearance:checkbox}
+button.input[type='button'],input[type='submit'],input[type='reset'],input[type='file']{-webkit-appearance:button; border-radius:0;}
+input[type='search']::-webkit-search-cancel-button {-webkit-appearance:none;}
+h1,h2,h3,h4,h5,h6{font-weight:normal; font-size:1em;}
+button{background:none; cursor:pointer;}
+textarea{resize:none;}
+.ellipsis{text-overflow:ellipsis; white-space:nowrap; word-wrap:normal; overflow:hidden;}
+
+*::-webkit-scrollbar {
+  background: transparent;
+  width: 16px;
+}
+*::-webkit-scrollbar-thumb {
+  background: #fff5;
+  background-clip: padding-box;
+  border: 4px solid transparent;
+  border-radius: 8px;
+}
+*::-webkit-scrollbar-track {
+  background: #0000;
+}
+.checkIcon {
+  border-left: solid 2px #fffa;
+  border-bottom: solid 2px #fffa;
+  width: 6px;
+  height: 4px;
+  transform: rotate(-45deg);
+  position: relative;
+  top: 5px;
+  left: 2px;
+  transition: opacity ease .15s;
+}
+
+body {
+  font-family: 'Noto Sans KR',
+  'HelveticaNeue-Light',
+  'AppleSDGothicNeo-Light',
+  'Malgun Gothic',
+  Arial,
+  sans-serif;
+  background-color:#222;
+  color:var(--primary-text-color);
+  display: flex;
+  flex-direction: column;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.app {
+  display: flex;
+  flex-grow: 1;
+}
+.app > .left {
+  position: relative;
+  flex-grow: 1;
+}
+.app > .right {
+  display: flex;
+  flex-direction: column;
+  width: 430px;
+  position: relative;
+}
+.app.musicOnly > .left {
+  display: none;
+}
+.app.musicOnly > .right {
+  width: 100%;
+  position: relative;
+}
+
+.app > .right > .header {
+  background-color: var(--accent-color);
+  box-sizing: border-box;
+  text-align: center;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  height: 50px;
+}
+.app > .right > .header b {
+	line-height: 1em;
+}
+.app > .right > .header .btnToggleVideo {
+  background: transparent;
+  border-radius: 50%;
+  color: #f0f0f0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  left: 11px;
+  top: 9px;
+  width: 32px;
+  height: 32px;
+  transition: transform ease .3s;
+}
+.app > .right > .header .btnToggleVideo img {
+  width: 16px;
+}
+.app > .right > .header .btnToggleVideo:hover {
+  background: #fff3;
+}
+.app.musicOnly > .right > .header .btnToggleVideo {
+  transform: rotate(180deg);
+}
+
+.app > .right > .listArea {
+  background: #0003;
+  flex-grow: 1;
+  position: relative;
+  height: 100px;
+  display: flex;
+  flex-direction: column;
+}
+.musicSelectHeader {
+  display: flex;
+  padding: 8px 4px;
+}
+.musicSelectHeader.hide {
+  display: none;
+}
+.musicSelectHeader .button {
+  border-radius: 4px;
+  color: #ddd;
+  display: flex;
+  font-size: 14px;
+  gap: 6px;
+  padding: 4px 8px;
+}
+.musicSelectHeader .button:hover {
+  background: #fff1;
+}
+.musicSelectHeader .button:active {
+  background: #fff3;
+}
+
+.ribbonArea {
+  overflow: hidden;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: fit-content;
+}
+.ribbonArea .ribbon {
+  background: #333;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  opacity: 1;
+  padding: 8px 8px 8px 16px;
+  position: relative;
+  top: 0;
+  width: 100%;
+}
+.ribbonArea,
+.ribbonArea .ribbon {
+  transition: top ease .15s, opacity ease .15s, height ease .15s;
+}
+.ribbonArea .ribbon.hide {
+  top: 42px;
+}
+.ribbonArea.hide {
+}
+.ribbonArea.hide,
+.ribbonArea .ribbon.hide {
+  opacity: 0;
+  pointer-events: none;
+}
+.ribbonArea .ribbon > .label {
+  color: #bbb;
+  font-size: 14px;
+}
+.ribbonArea .ribbon > .right {
+  display: flex;
+}
+.ribbonArea .ribbon > .right .button {
+  border-radius: 4px;
+  color: #ddd;
+  display: flex;
+  font-size: 14px;
+  gap: 6px;
+  padding: 4px 8px;
+}
+.ribbonArea .ribbon > .right .button:hover {
+  background: #fff1;
+}
+.ribbonArea .ribbon > .right .button:active {
+  background: #fff3;
+}
+.ribbonArea .ribbon > .right .button.btnResetPlaylist {
+  color: #ce0000;
+}
+.ribbonArea .ribbon.musicSelecting .selectedCount {
+  font-weight: 700;
+}
+
+.lyricEditor {
+  background: #151515;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 70;
+  transition: top ease .4s;
+}
+.lyricEditor.hide {
+  top: 100%;
+}
+.lyricEditor > header {
+  background: #fff1;
+  color: #f0f0f0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 6px 14px;
+}
+.lyricEditor > header .right {
+  width: fit-content;
+}
+.lyricEditor .lyricInfo {
+  padding: 8px 8px;
+}
+.lyricEditor .lyricInfo .infoItem {
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  padding: 4px 8px;
+}
+.lyricEditor .lyricInfo .infoItem .label {
+  box-sizing: border-box;
+  text-align: right;
+  padding: 0 4px;
+  width: 48px;
+}
+.lyricEditor input,
+.lyricEditor textarea {
+  background: #222;
+  border: solid 2px transparent;
+  border-radius: 8px;
+  color: #f0f0f0;
+  font-size: 14px;
+  margin: 0 4px;
+  padding: 6px 8px;
+  width: 200px;
+  transition: border ease .15s;
+}
+.lyricEditor .lyricInfo .infoItem input[type="number"] {
+  text-align: right;
+}
+.lyricEditor .lyricInfo .infoItem input[type="number"]::-webkit-inner-spin-button {
+  display: none;
+}
+.lyricEditor .lyricInfo .infoItem.title input {
+  width: 270px;
+}
+.lyricEditor .lyricInfo .infoItem.offset input {
+  width: 60px;
+}
+.lyricEditor input:focus,
+.lyricEditor textarea:focus {
+  outline: none;
+  border-color: var(--accent-color);
+}
+.lyricEditor .lyricListArea {
+  display: flex;
+  flex-direction: column;
+  height: 0;
+  flex-grow: 1;
+}
+.lyricEditor .lyricListArea .listHeader {
+  background: #fff2;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 8px 4px;
+}
+.lyricEditor .lyricListArea .listHeader.syncControl {
+  background: #ffffff15;
+}
+.lyricEditor .lyricListArea .listHeader .left,
+.lyricEditor .lyricListArea .listHeader .right {
+  display: flex;
+  flex-direction: row;
+  width: fit-content;
+  align-items: center;
+}
+.lyricEditor .lyricListArea .listHeader:first-child .right {
+  width: 100%;
+}
+.lyricEditor .lyricListArea .listHeader .right textarea {
+  overflow: hidden;
+  width: 0;
+  height: 1.2em;
+  flex-grow: 1;
+}
+.lyricEditor .lyricListArea .listHeader .lyricListButton {
+  border-radius: 4px;
+  color: #f0f0f0;
+  padding: 4px 8px;
+  transition: background ease .15s;
+}
+.lyricEditor .lyricListArea .listHeader .lyricListButton:hover {
+  background: #fff1;
+}
+.lyricEditor .lyricListArea ul.lyricList {
+  --editCursor: 1;
+  --playingCursor: 1;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  gap: 8px;
+  height: 0;
+  overflow-y: scroll;
+  padding: 8px;
+}
+.lyricEditor ul.lyricList li.lyricItem {
+  background: #ffffff15;
+  border-radius: 4px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  padding: 0;
+  width: 100%;
+  min-height: 32px;
+}
+.lyricEditor ul.lyricList li.lyricItem div input {
+  background: transparent;
+  border: none;
+  border-radius: 4px;
+  box-sizing: border-box;
+  display: inline-block;
+  margin: 0;
+  padding: 0;
+  padding-right: 4px;
+  width: 100%;
+  height: 100%;
+}
+.lyricEditor ul.lyricList li.lyricItem .time {
+  width: 90px;
+  height: 100%;
+  margin-right: 4px;
+}
+.lyricEditor ul.lyricList li.lyricItem .time input {
+  text-align: center;
+}
+.lyricEditor ul.lyricList li.lyricItem .time input::-webkit-datetime-edit-ampm-field,
+.lyricEditor ul.lyricList li.lyricItem .time input::-webkit-datetime-edit-hour-field,
+.lyricEditor ul.lyricList li.lyricItem .time input::-webkit-calendar-picker-indicator {
+  display: none;
+}
+
+.lyricEditor ul.lyricList li.lyricItem .str {
+  flex-grow: 1;
+  height: 100%;
+}
+.lyricEditor ul.lyricList li.lyricItem .str input {
+  color: #aaa;
+  padding: 2px 8px;
+  transition: background ease .15s, color ease .05s;
+}
+.lyricEditor ul.lyricList li.lyricItem .str input:focus {
+  color: #f0f0f0;
+}
+.lyricEditor ul.lyricList li.lyricItem.editSync .time input {
+  background: #f005;
+}
+.lyricEditor ul.lyricList li.lyricItem.currPlaying .str input {
+  background: #00fa;
+  color: #f0f0f0;
+  transition: background ease 0s, color ease 0s;
+}
+
+#musicProgress .progressBar {
+	background: transparent;
+	border-radius: 2px;
+	cursor: pointer;
+	display: flex;
+	height: 8px;
+	width: 100%;
+	padding: 2px 0;
+	transition: padding ease .15s;
+}
+#musicProgress .progressBar::-webkit-progress-bar {
+	background: #fff3;
+	border-radius: 2px;
+	height: 100%;
+	transition: height ease .15s, border-radius ease .15s;
+}
+#musicProgress .progressBar::-webkit-progress-value {
+	background: white;
+	border-radius: 2px;
+	height: 100%;
+	transition: height ease .15s, border-radius ease .15s;
+}
+#musicProgress:hover .progressBar {
+	padding: 0;
+}
+#musicProgress:hover .progressBar::-webkit-progress-bar,
+#musicProgress:hover .progressBar::-webkit-progress-value {
+	border-radius: 4px;
+}
+#musicProgress #progressBarPreview {
+	background: transparent;
+	height: 8px;
+	width: calc(100% - 32px);
+	position: absolute;
+	top: 0px;
+	pointer-events: none;
+	transition: opacity ease .3s;
+}
+#musicProgress #progressBarPreview::-webkit-progress-bar {
+	background: transparent;
+	border-radius: 4px;
+	pointer-events: none;
+}
+#musicProgress #progressBarPreview::-webkit-progress-value {
+	background: #fff4;
+	border-radius: 4px;
+	height: 100%;
+	pointer-events: none;
+}
+#musicProgress .musicTime {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	padding: 8px 4px 4px;
+}
+#musicProgress .musicTime .wholeTime {
+	color: #fff3;
+}
+
+.captionOnList {
+  background: #151515;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 50;
+  transition: top ease .4s;
+}
+.captionOnList.hide {
+  top: 100%;
+}
+/* TODO:이거 컴포넌트화하기 */
+.captionOnList .button {
+  background: #fff1;
+  border-radius: 4px;
+  box-sizing: border-box;
+  color: #f0f0f0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  padding: 12px;
+  position: relative;
+}
+.captionOnList .button::after {
+  background: #fff0;
+  border-radius: inherit;
+  box-sizing: border-box;
+  content: "";
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  transition: background ease .15s;
+}
+.captionOnList .button:hover::after {
+  background: #fff1;
+}
+.captionOnList .button:active::after {
+  background: #fff3;
+}
+.captionOnList .button > img {
+  width: 16px;
+}
+.captionOnList > header {
+  background: #fff1;
+  color: #f0f0f0;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 4px;
+  padding: 6px 6px;
+  user-select: none;
+}
+.captionOnList > header > .left {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  gap: 4px;
+}
+.captionOnList > header > .left .btnClosePanel {
+  transition: transform ease .4s;
+}
+.captionOnList.hide > header > .left .btnClosePanel {
+  transform: rotate(180deg);
+}
+.captionOnList > header > .right {
+  display: flex;
+  flex-direction: row;
+}
+.captionOnList > header .button {
+  background: none;
+  border-radius: 50%;
+  padding: 8px;
+}
+.captionOnList ul.captionText {
+  overflow-y: scroll;
+  padding: 0 16px;
+  text-align: left;
+}
+.captionOnList .captionText .lyricItem {
+  color: #aaa;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  font-size: 14px;
+  padding: 0 0;
+  width: fit-content;
+  height: 32px;
+  transition: transform ease .2s, color ease .2s;
+}
+.captionOnList .captionText .lyricItem.current {
+  color: var(--primary-text-color);
+  transform: scale(1.15) translateX(6%);
+}
+.captionOnList .captionText .lyricItem .content {
+ cursor: pointer;
+}
+.lyricEditor > header .button {
+  border-radius: 4px;
+  color: #fff6;
+  font-size: 20px;
+  /* padding: 2px 7.5px; */
+  transition: background-color ease .15s;
+}
+.lyricEditor > header .button.btnExportScore {
+  color: #aaa;
+  font-size: 14px;
+  padding: 4px 7.5px;
+}
+.lyricEditor > header .button:hover {
+  background: #fff1;
+}
+
+.ribbonButton {
+  position: relative;
+}
+.ribbonButton > .ribbon {
+  background: #111a;
+  border-radius: 4px;
+  box-shadow: 0px 0px 8px 1px #0003;
+  color: #aaa;
+  opacity: 0;
+  padding: 6px 8px;
+  position: absolute;
+  bottom: 100%;
+  width: max-content;
+  font-size: 14px !important;
+  pointer-events: none;
+  transition: bottom ease .15s, opacity ease .15s;
+  z-index:1000;
+}
+.ribbonButton:hover > .ribbon {
+  bottom: 110%;
+  opacity: 1;
+}
+.ribbonButton.ribbonBottomSide > .ribbon {
+  bottom: auto;
+  top: 100%;
+}
+.ribbonButton.ribbonBottomSide:hover > .ribbon {
+  bottom: auto;
+  top: 110%;
+}
+.ribbonButton.toggle > img {
+  opacity: .3;
+  transition: opacity ease .15s;
+}
+.ribbonButton.toggle.on > img {
+  opacity: 1;
+}
+
+.moreButton {
+  position: relative;
+}
+.moreButton > .moreMenuWrapper {
+  opacity: 0;
+  position: absolute;
+  bottom: 50%;
+  right: 0;
+  width: max-content;
+  z-index: 50;
+  padding: 4px 0 16px;
+  pointer-events: none;
+  transition: right ease .15s, top ease .15s, bottom ease .15s, opacity ease .15s;
+}
+.moreButton:hover > .moreMenuWrapper {
+  bottom: 60%;
+  opacity: 1;
+  pointer-events: initial;
+}
+.moreButton.bottomMore > .moreMenuWrapper {
+  bottom: auto;
+  top: 50%;
+  padding: 16px 0 4px;
+}
+.moreButton.bottomMore:hover > .moreMenuWrapper {
+  bottom: auto;
+  top: 60%;
+}
+.moreButton.moremore > .moreMenuWrapper {
+  bottom: -60%;
+  right: 98%;
+}
+.moreButton.moremore:hover > .moreMenuWrapper {
+  bottom: -60%;
+  right: 100%;
+}
+.moreButton > .moreMenuWrapper > ul.menuList {
+  background: #000a;
+  border-radius: 8px;
+  box-shadow: 0 0 8px 0 #000a;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  padding: 4px 0;
+}
+.moreButton > .moreMenuWrapper > ul.menuList > li.menuLine {
+  background: #fff2;
+  box-sizing: border-box;
+  margin: 2px 4px;
+  align-self: stretch;
+  height: 1px;
+}
+.moreButton > .moreMenuWrapper > ul.menuList > li.menuItem {
+  border-radius: 4px;
+  color: var(--primary-text-color);
+  font-weight: 500;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  position: relative;
+  padding: 8px 12px;
+  gap: 8px;
+}
+.moreButton > .moreMenuWrapper > ul.menuList > li.menuItem::after {
+  background: #fff0;
+  border-radius: inherit;
+  box-sizing: border-box;
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+	transition: background ease .15s;
+}
+.moreButton > .moreMenuWrapper > ul.menuList > li.menuItem:hover::after {
+	background: #fff1;
+}
+.moreButton > .moreMenuWrapper > ul.menuList > li.menuItem.moreButton.moremore:hover::after, 
+.moreButton > .moreMenuWrapper > ul.menuList > li.menuItem:active::after {
+	background: #fff3;
+}
+.moreButton > .moreMenuWrapper > ul.menuList > li.menuItem > .iconArea {
+  display: flex;
+}
+.moreButton > .moreMenuWrapper > ul.menuList > li.menuItem > .iconArea > img {
+  width: 14px;
+}
+.moreButton > .moreMenuWrapper > ul.menuList > li.menuItem > .label {
+  font-size: 13px;
+}

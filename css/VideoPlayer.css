@@ -1,0 +1,294 @@
+@charset "UTF-8";
+
+.VideoPlayer {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.VideoPlayer .overlay {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10;
+  cursor: pointer;
+}
+.VideoPlayer .overlay > * {
+  cursor: auto;
+}
+.VideoPlayer .overlay::before {
+  background: linear-gradient(#000a 0%, #0000 20%, #0000 80%, #000a 100%);
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  z-index: 1;
+  transition: opacity ease .15s;
+}
+.VideoPlayer.hover .overlay::before {
+  opacity: 1;
+}
+
+.VideoPlayer .overlay .ribbonButton > .ribbon {
+  bottom: 150%;
+}
+.VideoPlayer .overlay .ribbonButton:hover > .ribbon {
+  bottom: 200%;
+  opacity: 1;
+}
+
+.VideoPlayer .overlay .musicInfo {
+  align-self: stretch;
+  padding: 20px 24px;
+  opacity: 0;
+  z-index: 10;
+  transition: opacity ease .15s;
+}
+.VideoPlayer.hover .overlay .musicInfo {
+  opacity: 1;
+}
+.VideoPlayer .overlay .musicInfo .title {
+  color: var(--primary-text-color);
+  font-size: 22px;
+  font-weight: 500;
+}
+.VideoPlayer .overlay .musicInfo .singer {
+  color: #eee;
+  font-size: 16px;
+}
+
+.VideoPlayer .overlay .control {
+  padding: 16px;
+  z-index: 10;
+}
+
+.VideoPlayer .overlay .control .captionText {
+  background: #000a;
+  border-radius: 4px;
+  color: var(--primary-text-color);
+  font-size: 26px;
+  font-weight: 400;
+  line-height: 1em;
+  margin: 0 auto 32px;
+  padding: 6px 8px;
+  width: fit-content;
+  position: relative;
+  top: 32px;
+  transition: top ease .15s;
+}
+.VideoPlayer .overlay .control .captionText.hide,
+.VideoPlayer .overlay .control .captionText.noContent {
+  opacity: 0;
+}
+.VideoPlayer.hover .overlay .control .captionText {
+  top: 0px;
+}
+
+.VideoPlayer .jwplayer .jw-controls {
+  display: none;
+}
+
+.VideoPlayer .videoProgressBar {
+  display: flex;
+  margin-bottom: 8px;
+  position: relative;
+  opacity: 0;
+  transition: opacity ease .15s;
+}
+.VideoPlayer .videoProgressBar .progressBar {
+	background: transparent;
+	border-radius: 2px;
+	cursor: pointer;
+	display: flex;
+	height: 8px;
+	width: 100%;
+	padding: 2px 0;
+	transition: padding ease .15s;
+}
+.VideoPlayer .videoProgressBar .progressBar::-webkit-progress-bar {
+	background: #fff3;
+	border-radius: 2px;
+	height: 100%;
+	transition: height ease .15s, border-radius ease .15s;
+}
+.VideoPlayer .videoProgressBar .progressBar::-webkit-progress-value {
+	background: white;
+	border-radius: 2px;
+	height: 100%;
+	transition: height ease .15s, border-radius ease .15s;
+}
+.VideoPlayer .videoProgressBar:hover .progressBar {
+	padding: 0;
+}
+.VideoPlayer .videoProgressBar:hover .progressBar::-webkit-progress-bar,
+.VideoPlayer .videoProgressBar:hover .progressBar::-webkit-progress-value {
+	border-radius: 4px;
+}
+.VideoPlayer .videoProgressBar .progressBarPreview {
+	background: transparent;
+	height: 8px;
+	width: 100%;
+	position: absolute;
+	top: 0px;
+	pointer-events: none;
+	transition: opacity ease .3s;
+}
+.VideoPlayer .videoProgressBar .progressBarPreview::-webkit-progress-bar {
+	background: transparent;
+	border-radius: 4px;
+	pointer-events: none;
+}
+.VideoPlayer .videoProgressBar .progressBarPreview::-webkit-progress-value {
+  background: #fff4;
+  border-radius: 4px;
+  height: 100%;
+  pointer-events: none;
+}
+.VideoPlayer.hover .videoProgressBar,
+.VideoPlayer.hover .overlay .control .buttonArea {
+  display: flex;
+  opacity: 1;
+}
+.VideoPlayer .overlay .control .buttonArea {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 4px;
+  opacity: 0;
+  transition: opacity ease .15s;
+}
+.VideoPlayer .overlay .control .buttonArea > div {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+.VideoPlayer .overlay .control .buttonArea button {
+  border-radius: 50%;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+.VideoPlayer .overlay .control .buttonArea button .ribbon {
+  color: #fffa;
+}
+.VideoPlayer .overlay .control button.btnPlaypause {
+	background: transparent;
+	color: #fff;
+	font-size: 24px;
+	margin: 0 8px;
+}
+.VideoPlayer .overlay .control button.btnPlaypause .playing,
+.VideoPlayer .overlay .control button.btnPlaypause .paused {
+	display: none;
+	line-height: 1em;
+	width: 18px;
+}
+.VideoPlayer .overlay .control button.btnPlaypause .playing.ribbon,
+.VideoPlayer .overlay .control button.btnPlaypause .paused.ribbon {
+	border: none;
+	width: max-content;
+}
+.VideoPlayer .overlay .control button.btnPlaypause.playing .playing,
+.VideoPlayer .overlay .control button.btnPlaypause.paused .paused {
+	display: block;
+}
+.VideoPlayer .overlay .control .musicTime {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 6px;
+  color: var(--secondary-text-color);
+  font-size: 12px;
+  padding: 0 8px;
+}
+.VideoPlayer .overlay .control .musicTime .currTime {
+  color: var(--primary-text-color);
+  font-size: 16px;
+}
+.VideoPlayer .overlay .control .musicTime .line {
+  background: #fff5;
+  width: 1px;
+  height: 12px;
+}
+.VideoPlayer .overlay .control .musicTime .wholeTime {
+  font-size: 16px;
+}
+.VideoPlayer .overlay .control .right {
+  padding: 4px;
+}
+.VideoPlayer .overlay .control .right button {
+  padding: 0 8px;
+}
+.VideoPlayer .overlay .control .right button > img {
+  width: 16px;
+}
+
+.VideoPlayer .spinnerWrapper {
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+.VideoPlayer .spinnerWrapper.hide {
+  display: none;
+}
+.VideoPlayer .spinnerWrapper .spinner {
+  --radius: 32px;
+  border: white solid 8px;
+  border-radius: 50%;
+  box-sizing: border-box;
+  mix-blend-mode: lighten;
+  position: relative;
+  width: calc(var(--radius) * 2);
+  height: calc(var(--radius) * 2);
+  animation: spin 3s ease 0s infinite;
+}
+.VideoPlayer .spinnerWrapper .spinner .innerWrapper {
+  box-sizing: border-box;
+  overflow: hidden;
+  position: relative;
+  width: var(--radius);
+  height: var(--radius);
+  position: absolute;
+  top: -8px;
+  left: -8px;
+}
+.VideoPlayer .spinnerWrapper .spinner .innerWrapper .inner {
+  border: black solid 8px;
+  border-radius: 50%;
+  box-sizing: border-box;
+  width: calc(var(--radius) * 2);
+  height: calc(var(--radius) * 2);
+}
+@keyframes spin {
+  0% {
+    transform: rotateZ(0deg);
+  }
+  33% {
+    transform: rotateZ(240deg);
+  }
+  66% {
+    transform: rotateZ(-480deg);
+  }
+  100% {
+    transform: rotateZ(720deg);
+  }
+}
